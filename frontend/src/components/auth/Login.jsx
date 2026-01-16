@@ -4,7 +4,7 @@ import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
 import { RiShieldUserLine } from "react-icons/ri";
 
 const Login = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,15 +23,18 @@ const Login = () => {
       });
 
       const data = await response.json();
-
       if (!response.ok) throw new Error(data.message || "Login failed");
 
-      // Token & user save
+      // ✅ Save token & user
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      
-      navigate("/admindashboard");
+      // ✅ ROLE BASED REDIRECT
+      if (data.user.role === "admin") {
+        navigate("/admindashboard");
+      } else if (data.user.role === "receptionist") {
+        navigate("/receptionistdashboard");
+      }
 
     } catch (err) {
       setError(err.message);
@@ -41,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center  bg-gradient-to-br from-[#103153] via-[#0e3a55] to-[#081e2c] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#103153] via-[#0e3a55] to-[#081e2c] px-4">
       <div className="relative w-full max-w-md rounded-2xl bg-white/90 backdrop-blur-xl shadow-2xl px-8 pb-8 pt-28">
         <div className="absolute top-5 left-1/2 -translate-x-1/2">
           <div className="w-17 h-17 rounded-2xl bg-[#F8AF2A] flex items-center justify-center">
@@ -50,13 +53,13 @@ const Login = () => {
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold epilogue text-[#103153]">Welcome Back</h1>
-          <p className="text-gray-500 epilogue text-sm mt-2">Login to continue</p>
+          <h1 className="text-3xl font-bold text-[#103153]">Welcome Back</h1>
+          <p className="text-gray-500 text-sm mt-2">Login to continue</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="text-sm epilogue font-medium text-gray-700">Email</label>
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <div className="relative mt-2">
               <HiOutlineMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
               <input
@@ -71,7 +74,7 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium epilogue text-gray-700">Password</label>
+            <label className="text-sm font-medium text-gray-700">Password</label>
             <div className="relative mt-2">
               <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
               <input
@@ -90,7 +93,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[#103153] epilogue py-3 font-semibold text-white shadow-lg hover:brightness-110 active:scale-[0.98] transition"
+            className="w-full rounded-xl bg-[#103153] py-3 font-semibold text-white shadow-lg hover:brightness-110 active:scale-[0.98] transition"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
