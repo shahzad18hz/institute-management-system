@@ -11,7 +11,7 @@ const attendanceRoutes = require("./routes/attendanceRoutes");
 const feeRoutes = require("./routes/feeRoutes");
 const setupRoutes = require("./routes/setup");
 const receptionistRoutes = require("./routes/receptionistRoutes")
-
+const leadRoutes = require("./routes/leadRoutes")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -43,6 +43,7 @@ app.use("/api/students", studentRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/fees", feeRoutes);
 app.use("/api/receptionists", receptionistRoutes);
+app.use("/api/leads", leadRoutes);
 
 // ✅ Server start
 app.listen(PORT, () => {

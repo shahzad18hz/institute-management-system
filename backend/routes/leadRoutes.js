@@ -1,9 +1,18 @@
 const express = require("express");
+const {
+  addLead,
+  getAllLeads,
+  getLeadById,
+  updateLeadStatus,
+  addFollowUp,
+} = require("../controllers/leadController");
+
 const router = express.Router();
-const {addLead , getLeads , updateLeadStatus }= require("../controllers/leadController");
 
-router.post("/" , addLead);
-router.get("/" , getLeads);
-router.patch("/:id/status" , updateLeadStatus);
+router.post("/", addLead);
+router.get("/", getAllLeads);
+router.get("/:id", getLeadById);
+router.patch("/:id/status", updateLeadStatus);
+router.post("/:id/followup", addFollowUp);
 
-module.exports = router;
+module.exports = router; 

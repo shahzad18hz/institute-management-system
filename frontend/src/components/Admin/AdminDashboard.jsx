@@ -8,24 +8,42 @@ import Student from "./Student";
 import FeeCollection from "./FeeCollection";
 import AddReceptionist from "./AddReceptionist";
 import ReceptionistList from "./ReceptionistList";
-
-
+import LeadsList from "../Leads/LeadsList";
+import LeadView from "../Leads/LeadView";
 
 export default function AdminDashboard() {
   const [section, setSection] = useState("dashboard");
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
 
   return (
     <div className="flex h-screen">
       <Sidebar setSection={setSection} />
+
       <div className="flex-1 flex flex-col">
         <Header />
+
         <div className="p-6 flex-1 overflow-auto">
           {section === "dashboard" && <Dashboard />}
+
+          {section === "leads" && (
+            <LeadsList
+              setSection={setSection}
+              setSelectedLeadId={setSelectedLeadId}
+            />
+          )}
+
+          {section === "viewLead" && (
+            <LeadView
+              leadId={selectedLeadId}
+              setSection={setSection}
+            />
+          )}
+
           {section === "admissions" && <Admission />}
           {section === "attendance" && <Attendance />}
           {section === "students" && <Student />}
           {section === "feecollection" && <FeeCollection />}
-          {section === "addReceptionist" &&<AddReceptionist />}
+          {section === "addReceptionist" && <AddReceptionist />}
           {section === "allReceptionists" && <ReceptionistList />}
         </div>
       </div>

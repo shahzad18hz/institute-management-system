@@ -42,13 +42,15 @@ export const Header = ({ toggleSidebar, onLogout }) => {
           <HiOutlineUserCircle />
         </button>
 
-        <button
-          onClick={onLogout}
-          className="flex items-center gap-1 text-sm bg-red-500 hover:bg-red-600 px-3 py-1 rounded"
-        >
-          <HiOutlineLogout />
-          Logout
-        </button>
+       <button
+        onClick={() => {
+          localStorage.clear();
+          window.location.href = "/login";
+        }}
+        className="text-sm text-red-500"
+      >
+        Logout
+      </button>
       </div>
     </div>
   );

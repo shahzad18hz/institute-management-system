@@ -1,44 +1,38 @@
 const mongoose = require("mongoose");
 
-const leadsSchema = new mongoose.Schema(
+const followUpSchema = new mongoose.Schema({
+  method: {
+    type: String,
+    enum: ["message", "call", "reminder"],
+    required: true,
+  },
+  note: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const leadSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-
-    phone: {
-      type: String,
-      required: true,
-    },
-
-    course: {
-      type: String,
-      enum: ["Web Development", "Graphic Designing", "Digital Marketing", "SEO"],
-      required: true,
-    },
-
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    course: { type: String, required: true },
     source: {
       type: String,
       enum: ["Facebook", "Instagram", "Walk-in"],
-      required: true,
     },
-
     status: {
       type: String,
-      enum: ["new", "warm", "hot", "admitted", "not_interested"],
+      enum: ["new", "cold", "warm", "hot", "admitted", "not_interested"],
       default: "new",
-      required: true,
     },
-
-    followupDate: {
-      type: Date,
-      required: true,
-    },
+    followUps: [followUpSchema],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Lead" , leadsSchema);
+module.exports = mongoose.model("Lead", leadSchema);

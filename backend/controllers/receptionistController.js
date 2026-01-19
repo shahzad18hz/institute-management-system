@@ -1,5 +1,4 @@
-const User = require("../models/user");
-const bcrypt = require("bcrypt");
+const Receptionist = require("../models/Receptionist");
 
 // ADD RECEPTIONIST (ADMIN ONLY)
 exports.addReceptionist = async (req, res) => {
@@ -7,19 +6,22 @@ exports.addReceptionist = async (req, res) => {
     const { name, email, password } = req.body;
 
     // check already exists
-    const exists = await User.findOne({ email: email.toLowerCase() });
+    const exists = await Receptionist.findOne({
+      email: email.toLowerCase(),
+    });
     if (exists) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const receptionist = await User.create({
+    const receptionist = await Receptionist.create({
       name,
       email: email.toLowerCase(),
-      password: hashedPassword,
+      password, // ❗ plain password (model hash karega)
       role: "receptionist",
       isActive: true,
+
+      // ✅ YE LINE SAB SE ZAROORI HAI
+      createdBy: req.user.id, // admin ka id (JWT se)
     });
 
     res.status(201).json({
@@ -39,14 +41,14 @@ exports.addReceptionist = async (req, res) => {
 
 // GET ALL RECEPTIONISTS
 exports.getReceptionists = async (req, res) => {
-  const list = await User.find({ role: "receptionist" }).select("-password");
+  const list = await Receptionist.find().select("-password");
   res.json(list);
 };
 
 // TOGGLE STATUS
 exports.toggleStatus = async (req, res) => {
-  const rec = await User.findById(req.params.id);
-  if (!rec || rec.role !== "receptionist") {
+  const rec = await Receptionist.findById(req.params.id);
+  if (!rec) {
     return res.status(404).json({ message: "Not found" });
   }
 
@@ -58,6 +60,6 @@ exports.toggleStatus = async (req, res) => {
 
 // DELETE
 exports.deleteReceptionist = async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
+  await Receptionist.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted successfully" });
 };
