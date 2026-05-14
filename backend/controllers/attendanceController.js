@@ -30,33 +30,3 @@ exports.markAttendance = async (req, res) => {
   }
 };
 
-
-const Attendance = require("../models/Attendance");
-
-exports.getAllStudents = async (req, res) => {
-  const { date } = req.query;
-
-  try {
-    const students = await Student.find();
-
-    if (!date) {
-      return res.json(students);
-    }
-
-    const attendance = await Attendance.find({ date });
-
-    const map = {};
-    attendance.forEach(a => {
-      map[a.student.toString()] = a.status;
-    });
-
-    const result = students.map(s => ({
-      ...s.toObject(),
-      status: map[s._id.toString()] || "A",
-    }));
-
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ message: "Student fetch error" });
-  }
-};

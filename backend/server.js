@@ -12,6 +12,8 @@ const feeRoutes = require("./routes/feeRoutes");
 const setupRoutes = require("./routes/setup");
 const receptionistRoutes = require("./routes/receptionistRoutes")
 const leadRoutes = require("./routes/leadRoutes")
+const teacherRoutes = require("./routes/teacherRoutes");
+const teacherAttendanceRoutes = require("./routes/teacherAttendanceRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -26,7 +28,7 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], 
   })
 );
 
@@ -44,6 +46,8 @@ app.use("/api/attendance", attendanceRoutes);
 app.use("/api/fees", feeRoutes);
 app.use("/api/receptionists", receptionistRoutes);
 app.use("/api/leads", leadRoutes);
+app.use("/api/teachers", teacherRoutes);
+app.use("/api/teacher-attendance", teacherAttendanceRoutes);
 
 // ✅ Server start
 app.listen(PORT, () => {

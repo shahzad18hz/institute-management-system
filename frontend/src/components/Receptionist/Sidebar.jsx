@@ -10,7 +10,7 @@ import { PiStudentDuotone } from "react-icons/pi";
 export const Sidebar = ({ setSection, activeSection }) => {
   const menuItems = [
     { label: "Dashboard", key: "dashboard", icon: <HiOutlineHome /> },
-    { label: "Appointments", key: "appointments", icon: <HiOutlineCalendar /> },
+    { label: "TeacherAttendance", key: "teacherattendance", icon: <HiOutlineCalendar /> },
     { label: "Students", key: "students", icon: <PiStudentDuotone /> },
     { label: "Fee Collection", key: "feecollection", icon: <HiOutlineCash /> },
   ];

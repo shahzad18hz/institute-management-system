@@ -16,9 +16,7 @@ export default function Attendance() {
       const res = await axios.get(
         `http://localhost:5000/api/students?date=${date}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       setStudents(res.data.students || []);
@@ -32,13 +30,11 @@ export default function Attendance() {
     fetchStudents();
   }, [date]);
 
-  // ================= TOGGLE =================
-  const toggleAttendance = (id) => {
+  // ================= MARK P / A =================
+  const markAttendance = (id, status) => {
     setStudents((prev) =>
       prev.map((s) =>
-        s._id === id
-          ? { ...s, status: s.status === "P" ? "A" : "P" }
-          : s
+        s._id === id ? { ...s, status } : s
       )
     );
   };
@@ -57,11 +53,7 @@ export default function Attendance() {
       await axios.post(
         "http://localhost:5000/api/attendance/mark",
         { date, records },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       alert("Attendance Submitted ✅");
@@ -118,7 +110,7 @@ export default function Attendance() {
                   Course
                 </th>
                 <th className="px-4 py-3 text-center font-medium">
-                  Present
+                  Attendance
                 </th>
               </tr>
             </thead>
@@ -151,15 +143,31 @@ export default function Attendance() {
                       {s.course}
                     </td>
 
+                    {/* ✅ P / A BUTTONS (NO DESIGN CHANGE) */}
                     <td className="px-4 py-2 text-center">
-                      <input
-                        type="checkbox"
-                        checked={s.status === "P"}
-                        onChange={() =>
-                          toggleAttendance(s._id)
-                        }
-                        className="w-5 h-5 accent-[#F8AF2A] cursor-pointer"
-                      />
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => markAttendance(s._id, "P")}
+                          className={`px-3 py-1 rounded text-white font-semibold ${
+                            s.status === "P"
+                              ? "bg-green-600"
+                              : "bg-gray-300 hover:bg-green-500"
+                          }`}
+                        >
+                          P
+                        </button>
+
+                        <button
+                          onClick={() => markAttendance(s._id, "A")}
+                          className={`px-3 py-1 rounded text-white font-semibold ${
+                            s.status === "A"
+                              ? "bg-red-600"
+                              : "bg-gray-300 hover:bg-red-500"
+                          }`}
+                        >
+                          A
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
